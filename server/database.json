@@ -1,0 +1,10 @@
+{
+    "dev": {
+        "driver": "pg",
+        "user": "postgres",
+        "password": "Letlovelead",
+        "host": "localhost",
+        "port": 5432,
+        "database": "school_rbac"
+    }
+}
