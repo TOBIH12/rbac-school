@@ -13,10 +13,8 @@ const requirePermissions = (requiredPermission: string) => {
             }
 
             const roleId = req.user?.roleId;
-            console.log('User role ID:', roleId);
             // Fetch the user's permissions based on their role from the database
             const userPermissions = await pool.query(getUserPermissionsQuery, [roleId, requiredPermission]);
-            console.log('User permissions:', userPermissions.rows[0]);
 
             if (userPermissions.rows.length === 0) {
                 return res.status(403).json({
@@ -24,7 +22,6 @@ const requirePermissions = (requiredPermission: string) => {
                     error: 'Forbidden: You do not have the required permissions to access this resource',
                 });
             }
-            console.log(`User with role_id ${roleId} has the required permission: ${requiredPermission}`);
 
           return next(); 
 

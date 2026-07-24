@@ -5,3 +5,9 @@ export type UserInfo = {
   email: string;
   roleId: number;
 };
+
+export type ParamInfo = {
+        userId?: string;
+        page: string;
+        role?: string;
+}

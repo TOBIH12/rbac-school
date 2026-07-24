@@ -20,3 +20,30 @@ export const loginUserSchema = z.object({
 export const loginUserSchemaDTO = z.object({
     body: loginUserSchema
 });
+
+export const adminViewUsersSchemaDTO = z.object({
+  params: z.object({
+    page: z.coerce
+      .number('Invalid page number')
+      .int('Invalid page number')
+      .positive('Invalid page number'),
+  }),
+});
+
+export const adminGetSpecificUserSchemaDTO = z.object({
+    params: z.object({
+        userId: z.coerce
+      .number('Invalid userId')
+      .int('Invalid userId')
+      .positive('Invalid userId'),
+    })
+})
+
+export const getStudentsSchemaDTO = z.object({
+     params: z.object({
+        page: z.coerce
+      .number('Invalid page number')
+      .int('Invalid page number')
+      .positive('Invalid page number'),
+    })
+})

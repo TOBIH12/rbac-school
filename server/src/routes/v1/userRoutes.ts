@@ -2,7 +2,7 @@ import express from 'express';
 import UsersController from '../../controllers/usersControllers';
 import validationMiddleware from '../../middleware/validator';
 import requirePermissions from '../../middleware/permissions';
-import { createUserSchemaDTO, loginUserSchemaDTO } from '../../zodSchema';
+import { adminGetSpecificUserSchemaDTO, adminViewUsersSchemaDTO, createUserSchemaDTO, getStudentsSchemaDTO, loginUserSchemaDTO } from '../../zodSchema';
 import authMiddleware from '../../middleware/authMiddleware';
 
 const router = express();
@@ -22,22 +22,32 @@ router.post(
     usersController.login
 );
 router.get(
-    '/admin/view_users',
+    '/admin/view_users/:page',
     authMiddleware,
     requirePermissions("manage_users"),
+    validationMiddleware(adminViewUsersSchemaDTO),
     usersController.adminViewUsers
 );
-// router.get(
-//     '/admin/view_user_by_id/:userId',
-// );
-// router.get(
-//     '/lect/view_course_students',
-// )
-// router.get(
-//     '/student/dashboard',
-// )
-// router.delete(
-//     '/admin/delete_user/:userId'
-// )
+router.get(
+    '/admin/view_specific_user/:userId',
+    authMiddleware,
+    requirePermissions("manage_users"),
+    validationMiddleware(adminGetSpecificUserSchemaDTO),
+    usersController.adminViewSpecificUser
+);
+router.get(
+    '/lect/view_students/:page',
+    authMiddleware,
+    requirePermissions("view_students"),
+    validationMiddleware(getStudentsSchemaDTO),
+    usersController.getStudents
+)
+router.delete(
+    '/admin/delete_user/:userId',
+    authMiddleware,
+    requirePermissions("manage_users"),
+    validationMiddleware(adminGetSpecificUserSchemaDTO),
+    usersController.deleteUser
+)
 
 export default router;

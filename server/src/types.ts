@@ -1,14 +1,9 @@
-import { UserInfo } from './utils/userInterface';
+import { UserInfo, ParamInfo } from './utils/userInterface';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserInfo;
-      params?: {
-        userId?: string;
-        page?: string;
-        role?: string;
-      };
+      user?: UserInfo
       query?: {
         page?: string;
         limit?: string;

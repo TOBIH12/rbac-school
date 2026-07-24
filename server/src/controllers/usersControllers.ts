@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import z from 'zod';
 import pool from '../config/db';
-import { fetchUserByEmailQuery, inputUserRoleValuesQuery, insertUserQuery } from '../queries/user.queries';
+import { fetchUserByEmailQuery, inputUserRoleValuesQuery, insertUserQuery, getUsersCountQuery, getAllUsersQuery, fetchUserByIdQuery, fetchUserRoleByIdQuery, getLecturerStudentsCount, getLecturerStudentsQuery, deleteUserQuery, deleteUserRoleQuery } from '../queries/user.queries';
 import { createUserSchema, loginUserSchema } from '../zodSchema';
 
 dotenv.config();
@@ -89,7 +89,7 @@ export default class UsersController {
       if(!userResponse.rows || userResponse.rows.length === 0){
            return res.status(400).json({
           status: 'error',
-          error: 'Invalid Email or Password',
+          error: 'Invalid email or password.',
         });
       }
 
@@ -130,7 +130,6 @@ export default class UsersController {
         },
       });
     } catch (error) {
-      console.log(error)
       return res.status(500).json({
         status: 'error',
         error: (error as string) || 'Server Error',
@@ -138,12 +137,180 @@ export default class UsersController {
     }
   }
 
-  async  adminViewUsers(req: Request<LoginUserInput>, res: Response): Promise<Response> {
+  async  adminViewUsers(req: Request, res: Response): Promise<Response> {
     try {
-      
-      return res.send("get");
+      const pageParam = req.params.page as string; 
+      const page = Number.parseInt(pageParam, 10);
+      const limit = 10;
+
+      if (!Number.isFinite(page) || page <= 0) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'Invalid page number',
+        });
+      }
+
+      const offset = (page - 1) * limit;
+
+      const [usersCountResult, usersResult] = await Promise.all([
+        pool.query(getUsersCountQuery),
+        pool.query(getAllUsersQuery, [limit, offset])
+      ])
+
+      const totalUsers = usersCountResult.rows[0].total_users
+
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          users: usersResult.rows || [],
+          totalUsers,
+          currentPage: page,
+          totalPages: Math.ceil(totalUsers / limit)
+        }
+      });
     } catch (error) {
-      console.log(error)
+      return res.status(500).json({
+        status: 'error',
+        error: (error as string) || 'Server Error',
+      });
+    }
+  }
+
+  async adminViewSpecificUser(req: Request, res: Response): Promise<Response> {
+    try {
+
+        const userId = req.params.userId as string; 
+        const parsedUserId = Number.parseInt(userId, 10);
+
+      if (!Number.isFinite(parsedUserId) || parsedUserId <= 0) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'Invalid userId',
+        });
+      }
+
+      const [userResponse, roleResponse] = await Promise.all([
+        pool.query(fetchUserByIdQuery, [parsedUserId]),
+        pool.query(fetchUserRoleByIdQuery, [parsedUserId])
+      ]);
+
+      if(!userResponse.rows || userResponse.rows.length === 0){
+           return res.status(404).json({
+          status: 'error',
+          error: 'User not found.',
+        });
+      }
+
+      const {
+        id,
+        first_name,
+        last_name,
+        email,
+      } = userResponse.rows[0];
+
+      if(!roleResponse.rows || roleResponse.rows.length <= 0){
+           return res.status(404).json({
+          status: 'error',
+          error: 'User role not found.',
+        });
+      }
+
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'User fetched successfully',
+          userId: id,
+          firstName: first_name,
+          lastName: last_name,
+          email,
+          roleId: roleResponse.rows[0].role_id,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: (error as string) || 'Server Error',
+      });
+    }
+  }
+
+  async getStudents(req: Request, res: Response): Promise<Response> {
+    try {
+       const pageParam = req.params.page as string; 
+      const page = Number.parseInt(pageParam, 10);
+      const limit = 10;
+
+      if (!Number.isFinite(page) || page <= 0) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'Invalid page number',
+        });
+      }
+
+      const offset = (page - 1) * limit;
+
+      const [studentsCount, studentsResponse] = await Promise.all([
+        pool.query(getLecturerStudentsCount, [req.user?.userId]),
+        pool.query(getLecturerStudentsQuery, [req.user?.userId, limit, offset])
+      ])
+
+      const totalStudents = studentsCount.rows[0].total_students;
+
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          students: studentsResponse.rows || [],
+          totalStudents,
+          currentPage: page,
+          totalPages: Math.ceil(totalStudents / limit)
+        }
+      }); 
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: (error as string) || 'Server Error',
+      });
+    }
+  }
+
+  async deleteUser(req: Request, res: Response): Promise<Response> {
+    try {
+      const userId = req.params.userId as string; 
+      const parsedUserId = Number.parseInt(userId, 10);
+
+      if (!Number.isFinite(parsedUserId) || parsedUserId <= 0) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'Invalid userId',
+        });
+      }
+
+      const [deleteUserResult, deleteUserRoleResult] = await Promise.all([
+        pool.query(deleteUserRoleQuery, [parsedUserId]),
+        pool.query(deleteUserQuery, [parsedUserId])
+      ]);
+
+      if (!deleteUserResult.rows || deleteUserResult.rows.length === 0) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'User not found or already deleted.',
+        });
+      }
+
+      if (!deleteUserRoleResult.rows || deleteUserRoleResult.rows.length === 0) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'User role not found or already deleted.',
+        });
+      }
+
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'User deleted successfully',
+        }
+      });
+    } catch (error) {
       return res.status(500).json({
         status: 'error',
         error: (error as string) || 'Server Error',

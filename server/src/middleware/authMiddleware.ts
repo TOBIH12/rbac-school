@@ -1,8 +1,6 @@
 import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import pool from '../config/db';
-import { fetchUserByIdQuery } from '../queries/user.queries';
 
 dotenv.config();
 
@@ -42,7 +40,6 @@ const authMiddleware: RequestHandler = (req, res, next) => {
         }
         
         req.user = info as { userId: number; firstName: string; lastName: string; email: string; roleId: number };
-        console.log('User info from token:', req.user);
 
         return next();
       } catch (err) {
