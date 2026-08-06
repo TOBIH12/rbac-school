@@ -41,13 +41,13 @@ router.get(
     requirePermissions("view_students"),
     validationMiddleware(getStudentsSchemaDTO),
     usersController.getStudents
-)
+);
 router.delete(
     '/admin/delete_user/:userId',
     authMiddleware,
     requirePermissions("manage_users"),
     validationMiddleware(adminGetSpecificUserSchemaDTO),
     usersController.deleteUser
-)
+);
 
 export default router;

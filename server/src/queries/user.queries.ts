@@ -20,7 +20,14 @@ export const getAllUsersQuery = `SELECT u.id as user_id, u.first_name, u.last_na
 
 export const getLecturerStudentsCount = `SELECT COUNT(e.student_id) AS total_students FROM enrollments e WHERE course_id IN (SELECT course_id FROM courses WHERE lecturer_id = $1)`
 
-export const getLecturerStudentsQuery = `SELECT c.id as course_id, c.course_code, c.title, e.student_id FROM courses c LEFT JOIN enrollments e ON c.id = e.course_id WHERE c.course_code IN (SELECT course_code FROM courses WHERE lecturer_id = $1) ORDER BY c.course_code LIMIT $2 OFFSET $3`;
+export const getLecturerStudentsQuery = `
+SELECT c.id as course_id, c.course_code, c.title, e.student_id, u.first_name, u.last_name 
+FROM courses c LEFT JOIN enrollments e ON c.id = e.course_id 
+LEFT JOIN users u ON e.student_id = u.id 
+WHERE c.course_code IN (SELECT course_code FROM courses WHERE lecturer_id = $1)
+AND e.student_id IS NOT NULL
+ORDER BY c.course_code 
+LIMIT $2 OFFSET $3`;
 
 export const deleteUserQuery = `DELETE FROM users WHERE id = $1 RETURNING *`;
 

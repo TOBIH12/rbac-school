@@ -47,3 +47,51 @@ export const getStudentsSchemaDTO = z.object({
       .positive('Invalid page number'),
     })
 })
+
+// POST SCHEMAS
+
+export const postAnnouncementSchema = z.object({
+     title: z.string().min(1, 'Title is required').max(100),
+     content: z.string().min(1, 'Content is required'),
+})
+
+export const postAnnouncementSchemaDTO = z.object({
+    body: postAnnouncementSchema
+})
+
+export const deleteAnnouncementSchemaDTO = z.object({
+    params: z.object({
+        announcementId: z.coerce
+            .number('Invalid announcement ID')
+            .int('Invalid announcement ID')
+            .positive('Invalid announcement ID')
+    })
+})
+
+export const createCourseSchema = z.object({
+    courseCode: z.string().min(1, 'Course Code is required').max(6),
+    title: z.string().min(1, 'Feedback is required').max(50),
+    lecturerEmail: z.string().email({ message: 'Invalid email address' }),
+})
+
+export const createCourseSchemaDTO = z.object({
+    body: createCourseSchema
+})
+
+export const inputGradeSchema = z.object({
+    courseCode: z.string().min(1, 'Course Code is required').max(6),
+    grade: z.string().min(1, 'Grade is required').min(1).max(1),
+    feedback: z.string().min(1, 'Feedback is required').max(50),
+})
+
+export const inputGradeSchemaDTO = z.object({
+    body: inputGradeSchema
+})
+
+export const enrollCourseSchema = z.object({
+    courseCode: z.string().min(1, 'Course Code is required').max(6),
+})
+
+export const enrollCourseSchemaDTO = z.object({
+    body: enrollCourseSchema
+})

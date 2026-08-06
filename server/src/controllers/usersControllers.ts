@@ -71,7 +71,6 @@ export default class UsersController {
       });
 
     } catch (error: unknown) {
-      console.error('Error creating user:', error);
       return res.status(500).json({
         status: 'error',
         error: (error as string) || 'Server Error',
@@ -104,15 +103,13 @@ export default class UsersController {
         });
       }
 
-      const userRows = userResponse.rows[0];
-
       const token = jwt.sign(
         {
-          userId: userRows.user_id,
-          firstName: userRows.first_name,
-          lastName: userRows.last_name,
-          email: userRows.email,
-          roleId: userRows.role_id
+          userId: user.user_id,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          email: user.email,
+          roleId: user.role_id
         },
         process.env.JWT_SECRET as string,
         { expiresIn: '15h'}
@@ -122,11 +119,11 @@ export default class UsersController {
         status: 'success',
         data: {
           token,
-          userId: userRows.user_id,
-          firstName: userRows.first_name,
-          lastName: userRows.last_name,
-          email: userRows.email,
-          roleId: userRows.role_id
+          userId: user.user_id,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          email: user.email,
+          roleId: user.role_id
         },
       });
     } catch (error) {
