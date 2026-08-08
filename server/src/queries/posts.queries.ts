@@ -2,7 +2,7 @@ export const postAnnouncementQuery = `INSERT INTO "announcements" (title, conten
 
 export const editAnnouncementQuery = `UPDATE "announcements" SET title = $1, content = $2 WHERE announcements_id = $3 RETURNING *`;
 
-export const getAllAnnouncementsQuery = `SELECT * FROM "announcements" ORDER BY created_on DESC`;
+export const getAllAnnouncementsQuery = `SELECT * FROM "announcements" ORDER BY created_on DESC LIMIT $1 OFFSET $2`;
 
 export const getAnnouncementByIdQuery = `SELECT * FROM "announcements" WHERE announcements_id = $1`;
 

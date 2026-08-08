@@ -29,7 +29,12 @@ router.delete(
     requirePermissions("manage_announcements"),
     validationMiddleware(deleteAnnouncementSchemaDTO),
     postsController.deleteAnnouncement
-);
+)
+router.get(
+    '/fetch_announcements/:page',
+    authMiddleware,
+    postsController.fetchAnnouncements
+)
 router.post(
     '/create_course',
     authMiddleware,

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import pool from '../config/db';
-import { checkCourseEnrollmentQuery, checkStudentGradeQuery, createCourseQuery, deleteAnnouncementQuery, editAnnouncementQuery, enrollCourseQuery, fetchCourseInfoByIdquery, getAnnouncementByIdQuery, inputStudentGradeQuery, postAnnouncementQuery } from '../queries/posts.queries';
+import { checkCourseEnrollmentQuery, checkStudentGradeQuery, createCourseQuery, deleteAnnouncementQuery, editAnnouncementQuery, enrollCourseQuery, fetchCourseInfoByIdquery, getAllAnnouncementsQuery, getAnnouncementByIdQuery, inputStudentGradeQuery, postAnnouncementQuery } from '../queries/posts.queries';
 import { fetchUserByEmailQuery, fetchUserByIdQuery } from '../queries/user.queries';
 
 dotenv.config();
@@ -118,6 +118,46 @@ export default class PostsController {
             });
         } catch (error) {
         console.error('Error deleting announcement:', error);
+        return res.status(500).json({
+        status: 'error',
+        error: (error as string) || 'Server Error',
+      });
+        }
+    }
+
+    async fetchAnnouncements(req: Request, res: Response): Promise<Response> {
+        try {
+             const pageParam = req.params.page as string; 
+             const page = Number.parseInt(pageParam, 10);
+             const limit = 10;
+
+      if (!Number.isFinite(page) || page <= 0) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'Invalid page number',
+        });
+      }
+
+      const offset = (page - 1) * limit;
+
+      const announcementsResult = await pool.query(getAllAnnouncementsQuery, [limit, offset]);
+      if (!announcementsResult.rows || announcementsResult.rows.length === 0) {
+        return res.status(200).json({
+          status: 'error',
+          error: 'There are no announcements available at the moment.',
+        });
+      }
+      
+     return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Announcements fetched successfully',
+          announcements: announcementsResult.rows,
+        },
+      })
+            
+        } catch (error) {
+        console.error('Error retrieving announcement:', error);
         return res.status(500).json({
         status: 'error',
         error: (error as string) || 'Server Error',
@@ -335,4 +375,6 @@ export default class PostsController {
       });
         }
     }
+
+    
 }
