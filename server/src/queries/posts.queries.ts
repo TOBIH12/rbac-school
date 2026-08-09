@@ -19,3 +19,5 @@ export const inputStudentGradeQuery = `INSERT INTO "grades" (student_id, course_
 export const checkCourseEnrollmentQuery = `SELECT enrolled_at FROM "enrollments" WHERE student_id = $1 AND course_id = $2`;
 
 export const enrollCourseQuery = `INSERT INTO "enrollments" (student_id, course_id) VALUES ($1, $2) RETURNING *`;
+
+export const getLecturerCoursesQuery = `SELECT course_code FROM "courses" WHERE lecturer_id = $1`

@@ -2,6 +2,7 @@ import './types';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import compression from 'compression'
 import usersV1 from './routes/v1/userRoutes';
 import postsV1 from './routes/v1/postsRoutes';
 import { errorHandler, notFound } from './middleware/errorMiddleware';
@@ -11,6 +12,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(compression());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 

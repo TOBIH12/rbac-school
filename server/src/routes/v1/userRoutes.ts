@@ -49,5 +49,11 @@ router.delete(
     validationMiddleware(adminGetSpecificUserSchemaDTO),
     usersController.deleteUser
 );
+router.get(
+    '/fetch_profile',
+    authMiddleware,
+    requirePermissions("view_own_profile"),
+    usersController.fetchStudentProfile
+)
 
 export default router;

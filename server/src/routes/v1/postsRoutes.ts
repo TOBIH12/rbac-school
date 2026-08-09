@@ -56,5 +56,11 @@ router.post(
     validationMiddleware(enrollCourseSchemaDTO),
     postsController.enrollCourse
 )
+router.get(
+    '/get_courses',
+    authMiddleware,
+    requirePermissions("grade_students"),
+    postsController.getCourses
+)
 
 export default router;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import pool from '../config/db';
-import { checkCourseEnrollmentQuery, checkStudentGradeQuery, createCourseQuery, deleteAnnouncementQuery, editAnnouncementQuery, enrollCourseQuery, fetchCourseInfoByIdquery, getAllAnnouncementsQuery, getAnnouncementByIdQuery, inputStudentGradeQuery, postAnnouncementQuery } from '../queries/posts.queries';
+import { checkCourseEnrollmentQuery, checkStudentGradeQuery, createCourseQuery, deleteAnnouncementQuery, editAnnouncementQuery, enrollCourseQuery, fetchCourseInfoByIdquery, getAllAnnouncementsQuery, getAnnouncementByIdQuery, getLecturerCoursesQuery, inputStudentGradeQuery, postAnnouncementQuery } from '../queries/posts.queries';
 import { fetchUserByEmailQuery, fetchUserByIdQuery } from '../queries/user.queries';
 
 dotenv.config();
@@ -368,7 +368,6 @@ export default class PostsController {
                 });
             
         } catch (error) {
-             console.error('Error saving grade:', error);
         return res.status(500).json({
         status: 'error',
         error: (error as string) || 'Server Error',
@@ -376,5 +375,26 @@ export default class PostsController {
         }
     }
 
-    
+    async getCourses(req: Request, res: Response): Promise<Response> {
+        try {
+            const lecturerId = req.user?.userId
+
+            const coursesResponse = await pool.query(getLecturerCoursesQuery, [lecturerId])
+           
+
+            return res.status(200).send({
+                status: "success",
+                data: {
+                    message: "courses fetched successfully",
+                    courses: coursesResponse.rows
+                }
+            })
+            
+        } catch (error) {
+             return res.status(500).json({
+        status: 'error',
+        error: (error as string) || 'Server Error',
+      });
+        }
+    }
 }

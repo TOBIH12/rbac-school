@@ -314,4 +314,39 @@ export default class UsersController {
       });
     }
   }
+
+  async fetchStudentProfile(req: Request, res: Response): Promise<Response> {
+    try {
+     const  studentEmail = req.user?.email;
+
+     const studentInfo = await pool.query(fetchUserByEmailQuery, [studentEmail])
+     if(!studentInfo.rows || studentInfo.rows.length === 0){
+      return res.status(404).json({
+        status: "error",
+        error: "Information not found"
+      })
+     }
+
+     const { first_name, last_name, role_id } = studentInfo.rows[0]
+
+    return res.status(200).json({
+      status: "success",
+      data: {
+        message: "student information fetched successfully",
+        studentId: req.user?.userId,
+        firstName: first_name,
+        lastName: last_name,
+        email: studentEmail,
+        department: "Computer Science",
+        role: role_id
+      }
+     })
+      
+    } catch (error) {
+        return res.status(500).json({
+        status: 'error',
+        error: (error as string) || 'Server Error',
+      });
+    }
+  }
 }
