@@ -18,6 +18,14 @@ export const getUsersCountQuery = `SELECT COUNT(*) AS total_users FROM users`;
 
 export const getAllUsersQuery = `SELECT u.id as user_id, u.first_name, u.last_name, u.email, ur.role_id FROM users u LEFT JOIN user_roles ur ON u.id = ur.user_id ORDER BY u.id LIMIT $1 OFFSET $2`;
 
+export const getAllStudentsCountQuery = `SELECT COUNT(*) AS total_students FROM user_roles WHERE role_id = $1`
+
+export const getAllStudentsQuery = `SELECT u.id as user_id, u.first_name, u.last_name, u.email, ur.role_id FROM users u LEFT JOIN user_roles ur ON u.id = ur.user_id WHERE ur.role_id = $1 ORDER BY u.id LIMIT $2 OFFSET $3`;
+
+export const getAllLecturersCountQuery = `SELECT COUNT(*) AS total_lecturers FROM user_roles WHERE role_id = $1`
+
+export const getAllLecturersQuery = `SELECT u.id as user_id, u.first_name, u.last_name, u.email, ur.role_id FROM users u LEFT JOIN user_roles ur ON u.id = ur.user_id WHERE ur.role_id = $1 ORDER BY u.id LIMIT $2 OFFSET $3`;
+
 export const getLecturerStudentsCount = `SELECT COUNT(e.student_id) AS total_students FROM enrollments e WHERE course_id IN (SELECT course_id FROM courses WHERE lecturer_id = $1)`
 
 export const getLecturerStudentsQuery = `

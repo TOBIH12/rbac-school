@@ -19,8 +19,8 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
-app.use(express.json());
 app.use(compression());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/edu/users', usersV1);

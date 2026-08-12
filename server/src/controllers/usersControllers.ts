@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import z from 'zod';
 import pool from '../config/db';
-import { fetchUserByEmailQuery, inputUserRoleValuesQuery, insertUserQuery, getUsersCountQuery, getAllUsersQuery, fetchUserByIdQuery, fetchUserRoleByIdQuery, getLecturerStudentsCount, getLecturerStudentsQuery, deleteUserQuery, deleteUserRoleQuery } from '../queries/user.queries';
+import { fetchUserByEmailQuery, inputUserRoleValuesQuery, insertUserQuery, getUsersCountQuery, getAllUsersQuery, fetchUserByIdQuery, fetchUserRoleByIdQuery, getLecturerStudentsCount, getLecturerStudentsQuery, deleteUserQuery, deleteUserRoleQuery, getAllStudentsCountQuery, getAllStudentsQuery, getAllLecturersCountQuery, getAllLecturersQuery } from '../queries/user.queries';
 import { createUserSchema, loginUserSchema } from '../zodSchema';
 
 dotenv.config();
@@ -139,6 +139,8 @@ export default class UsersController {
       const pageParam = req.params.page as string; 
       const page = Number.parseInt(pageParam, 10);
       const limit = 10;
+      const studentRoleId = 12;
+      const lecturerRoleId = 11;
 
       if (!Number.isFinite(page) || page <= 0) {
         return res.status(400).json({
@@ -149,24 +151,94 @@ export default class UsersController {
 
       const offset = (page - 1) * limit;
 
-      const [usersCountResult, usersResult] = await Promise.all([
+      const [usersCountResult, studentsCountResult, studentsResponse, lecturersCountResult, lecturersResponse] = await Promise.all([
         pool.query(getUsersCountQuery),
-        pool.query(getAllUsersQuery, [limit, offset])
+        pool.query(getAllStudentsCountQuery, [studentRoleId]),
+        pool.query(getAllStudentsQuery, [studentRoleId, limit, offset]),
+        pool.query(getAllLecturersCountQuery, [lecturerRoleId]),
+        pool.query(getAllLecturersQuery, [lecturerRoleId, limit, offset])
       ])
 
       const totalUsers = usersCountResult.rows[0].total_users
 
+      if(!studentsResponse.rows || studentsResponse.rows.length === 0){
+          return res.status(404).json({
+          status: 'error',
+          error: 'No students found.',
+        });
+      }
+
+      const totalStudents = studentsCountResult.rows[0].total_students;
+
+      if(!lecturersResponse.rows || lecturersResponse.rows.length === 0){
+         return res.status(404).json({
+          status: 'error',
+          error: 'No lecturers found.',
+        });
+      }
+
+      const totalLecturers = lecturersCountResult.rows[0].total_lecturers
+
       return res.status(200).json({
         status: 'success',
         data: {
-          users: usersResult.rows || [],
+          students: studentsResponse.rows || [],
+          lecturers: lecturersResponse.rows || [],
           totalUsers,
+          totalStudents,
+          totalLecturers,
           currentPage: page,
           totalPages: Math.ceil(totalUsers / limit)
         }
       });
     } catch (error) {
       return res.status(500).json({
+        status: 'error',
+        error: (error as string) || 'Server Error',
+      });
+    }
+  }
+
+  async adminViewStudents(req: Request, res: Response): Promise<Response> {
+    try {
+       const pageParam = req.params.page as string; 
+       const page = Number.parseInt(pageParam, 10);
+       const limit = 10;
+       const roleId = 12
+
+      if (!Number.isFinite(page) || page <= 0) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'Invalid page number',
+        });
+      }
+
+      const offset = (page - 1) * limit;
+      const [studentsCountResult, studentsResponse] = await Promise.all([
+        pool.query(getAllStudentsCountQuery, [roleId]),
+        pool.query(getAllStudentsQuery, [roleId, limit, offset])
+      ])
+
+      if(!studentsResponse.rows || studentsResponse.rows.length === 0){
+          return res.status(404).json({
+          status: 'error',
+          error: 'No students found.',
+        });
+      }
+
+      const totalStudents = studentsCountResult.rows[0].total_students;
+
+       return res.status(200).json({
+        status: 'success',
+        data: {
+          students: studentsResponse.rows || [],
+          totalStudents,
+          currentPage: page,
+          totalPages: Math.ceil(totalStudents / limit)
+        }
+      });
+    } catch (error) {
+       return res.status(500).json({
         status: 'error',
         error: (error as string) || 'Server Error',
       });

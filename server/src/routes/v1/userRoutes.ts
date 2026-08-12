@@ -29,6 +29,13 @@ router.get(
     usersController.adminViewUsers
 );
 router.get(
+    '/view_students/:page',
+    authMiddleware,
+    requirePermissions("manage_users"),
+    validationMiddleware(adminViewUsersSchemaDTO),
+    usersController.adminViewStudents
+)
+router.get(
     '/admin/view_specific_user/:userId',
     authMiddleware,
     requirePermissions("manage_users"),
