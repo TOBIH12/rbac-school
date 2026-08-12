@@ -20,17 +20,18 @@ const Header = () => {
   }
 
   const handleUserRole = () => {
-    if(user?.roleId == 10){
-      setUserRole("Admin");
-    }else if(user?.roleId == 11){
-      setUserRole("Lecturer");
-    }
-    setUserRole("Student");
+    if (!user) return;
+    const id = Number(user.roleId);
+    let role = "";
+    if (id === 10) role = "Admin";
+    else if (id === 11) role = "Lecturer";
+    else if (id === 12) role = "Student";
+    setUserRole(role);
   }
 
   useEffect(() => {
     handleUserRole();
-  }, []);
+  }, [user]);
 
   return (
     <div className="w-full items-center mb-15 overflow-hidden">

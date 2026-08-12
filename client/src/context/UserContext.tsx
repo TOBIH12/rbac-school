@@ -45,6 +45,12 @@ export const UserProvider = ({children}: any) => {
     const logout = () => {
       setUser(null);
       localStorage.removeItem('auth_user');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userFirstName');
+      localStorage.removeItem('userLastName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRoleId');
     }
 
   return  <UserContext.Provider value={{user, login, logout, isLoading}}>{children}</UserContext.Provider>

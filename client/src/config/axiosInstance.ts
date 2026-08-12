@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 
-const token = localStorage.getItem('token');
-console.log("authorization token:", token)
 // Create an Axios instance
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_FRONTEND_BASE_URL, // Replace with your backend's base URL
@@ -20,7 +18,6 @@ axiosInstance.interceptors.request.use(
         if (token) {
             req.headers.Authorization = `Bearer ${token}`
         }
-        console.log('Request headers:', req.headers); // Debug log
         return req;
     },
     (error) => {

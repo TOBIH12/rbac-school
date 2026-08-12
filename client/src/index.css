@@ -7,3 +7,10 @@ body {
   color: #0d1d3b;
   font-family: Outfit;
 }
+
+.loader{
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    width: 100%;
+}

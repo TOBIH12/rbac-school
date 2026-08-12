@@ -27,14 +27,24 @@ const Login = () => {
       await axiosInstance
       .post(`/users/login`, userCred)
       .then((res) => {
-        console.log('User Logged In', res.data)
-        login(res.data.data)
+        login(res.data.data);
+        const token = res.data.data.token
+        const userId = res.data.data.userId
+        const userFirstName = res.data.data.firstName
+        const userLastName = res.data.data.lastName
+        const userEmail = res.data.data.email
+        const userRoleId = res.data.data.roleId
+        localStorage.setItem('token', token)
+        localStorage.setItem('userId', userId)
+        localStorage.setItem('userFirstName', userFirstName)
+        localStorage.setItem('userLastName', userLastName)
+        localStorage.setItem('userEmail', userEmail)
+        localStorage.setItem('userRoleId', userRoleId)
         navigate("/");
        if(!res.data){
       return setError("Couldn't login user. please try again")
        }
       })
-      
     } catch (err: any) {
       if(err.response){
         console.log(err.response.data.error);
