@@ -6,6 +6,8 @@ import Layout from './components/Layout.tsx'
 import {UserProvider} from './context/UserContext.tsx'
 import ErrorPage from './pages/ErrorPage.tsx'
 import Home from './pages/Home.tsx'
+import Login from './pages/Login.tsx'
+import Logout from './pages/Logout.tsx'
 
 
 
@@ -16,6 +18,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage/>,
     children: [
      {index: true, element: <Home />},
+     {path: 'login', element: <Login />},
+     {path: 'logout', element: <Logout />},
     ]
   }
 ])
