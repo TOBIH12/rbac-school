@@ -1,9 +1,9 @@
 import express from 'express';
-import authMiddleware from '../../middleware/authMiddleware';
-import validationMiddleware from '../../middleware/validator';
-import requirePermissions from '../../middleware/permissions';
-import PostsController from '../../controllers/postsContoller';
-import { createCourseSchemaDTO, deleteAnnouncementSchemaDTO, enrollCourseSchemaDTO, inputGradeSchemaDTO, postAnnouncementSchemaDTO } from '../../zodSchema';
+import authMiddleware from '../../middleware/authMiddleware.ts';
+import validationMiddleware from '../../middleware/validator.ts';
+import requirePermissions from '../../middleware/permissions.ts';
+import PostsController from '../../controllers/postsContoller.ts';
+import { createCourseSchemaDTO, deleteAnnouncementSchemaDTO, enrollCourseSchemaDTO, inputGradeSchemaDTO, postAnnouncementSchemaDTO } from '../../zodSchema.ts';
 
 const router = express();
 

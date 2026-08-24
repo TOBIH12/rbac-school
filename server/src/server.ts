@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import app from './index';
-import pool from './config/db';
+import app from './index.ts';
+import pool from './config/db.ts';
 
 dotenv.config();
 

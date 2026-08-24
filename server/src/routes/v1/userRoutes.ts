@@ -1,9 +1,9 @@
 import express from 'express';
-import UsersController from '../../controllers/usersControllers';
-import validationMiddleware from '../../middleware/validator';
-import requirePermissions from '../../middleware/permissions';
-import { adminGetSpecificUserSchemaDTO, adminViewUsersSchemaDTO, createUserSchemaDTO, getStudentsSchemaDTO, loginUserSchemaDTO } from '../../zodSchema';
-import authMiddleware from '../../middleware/authMiddleware';
+import UsersController from '../../controllers/usersControllers.ts';
+import validationMiddleware from '../../middleware/validator.ts';
+import requirePermissions from '../../middleware/permissions.ts';
+import { adminGetSpecificUserSchemaDTO, adminViewUsersSchemaDTO, createUserSchemaDTO, getStudentsSchemaDTO, loginUserSchemaDTO } from '../../zodSchema.ts';
+import authMiddleware from '../../middleware/authMiddleware.ts';
 
 const router = express();
 

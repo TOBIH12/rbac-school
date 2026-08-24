@@ -1,4 +1,4 @@
-import { UserInfo, ParamInfo } from './utils/userInterface';
+import { UserInfo, ParamInfo } from './utils/userInterface.ts';
 
 declare global {
   namespace Express {

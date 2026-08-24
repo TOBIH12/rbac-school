@@ -1,11 +1,11 @@
-import './types';
+import './types.ts';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import compression from 'compression'
-import usersV1 from './routes/v1/userRoutes';
-import postsV1 from './routes/v1/postsRoutes';
-import { errorHandler, notFound } from './middleware/errorMiddleware';
+import usersV1 from './routes/v1/userRoutes.ts';
+import postsV1 from './routes/v1/postsRoutes.ts';
+import { errorHandler, notFound } from './middleware/errorMiddleware.ts';
 
 dotenv.config();
 

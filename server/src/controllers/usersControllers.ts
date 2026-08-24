@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import z from 'zod';
-import pool from '../config/db';
-import { fetchUserByEmailQuery, inputUserRoleValuesQuery, insertUserQuery, getUsersCountQuery, getAllUsersQuery, fetchUserByIdQuery, fetchUserRoleByIdQuery, getLecturerStudentsCount, getLecturerStudentsQuery, deleteUserQuery, deleteUserRoleQuery, getAllStudentsCountQuery, getAllStudentsQuery, getAllLecturersCountQuery, getAllLecturersQuery } from '../queries/user.queries';
-import { createUserSchema, loginUserSchema } from '../zodSchema';
+import pool from '../config/db.ts';
+import { fetchUserByEmailQuery, inputUserRoleValuesQuery, insertUserQuery, getUsersCountQuery, getAllUsersQuery, fetchUserByIdQuery, fetchUserRoleByIdQuery, getLecturerStudentsCount, getLecturerStudentsQuery, deleteUserQuery, deleteUserRoleQuery, getAllStudentsCountQuery, getAllStudentsQuery, getAllLecturersCountQuery, getAllLecturersQuery } from '../queries/user.queries.ts';
+import { createUserSchema, loginUserSchema } from '../zodSchema.ts';
 
 dotenv.config();
 

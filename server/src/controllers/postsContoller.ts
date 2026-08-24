@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
-import pool from '../config/db';
-import { checkCourseEnrollmentQuery, checkStudentGradeQuery, createCourseQuery, deleteAnnouncementQuery, editAnnouncementQuery, enrollCourseQuery, fetchCourseInfoByIdquery, getAllAnnouncementsQuery, getAnnouncementByIdQuery, getLecturerCoursesQuery, inputStudentGradeQuery, postAnnouncementQuery } from '../queries/posts.queries';
-import { fetchUserByEmailQuery, fetchUserByIdQuery } from '../queries/user.queries';
+import pool from '../config/db.ts';
+import { checkCourseEnrollmentQuery, checkStudentGradeQuery, createCourseQuery, deleteAnnouncementQuery, editAnnouncementQuery, enrollCourseQuery, fetchCourseInfoByIdquery, getAllAnnouncementsQuery, getAnnouncementByIdQuery, getLecturerCoursesQuery, inputStudentGradeQuery, postAnnouncementQuery } from '../queries/posts.queries.ts';
+import { fetchUserByEmailQuery, fetchUserByIdQuery } from '../queries/user.queries.ts';
 
 dotenv.config();
 

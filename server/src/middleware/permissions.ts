@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import pool from '../config/db';
-import { getUserPermissionsQuery } from '../queries/user.queries';
+import pool from '../config/db.ts';
+import { getUserPermissionsQuery } from '../queries/user.queries.ts';
 
 const requirePermissions = (requiredPermission: string) => {
     return async (req: Request, res: Response, next: NextFunction) => {
