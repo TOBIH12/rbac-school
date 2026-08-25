@@ -1,8 +1,24 @@
+import Unauthorized from "./Unauthorized";
 
 const CreateAnnouncements = () => {
+  const currentUserRole = Number(localStorage.getItem('userRoleId'))
+  
+
+  
   return (
     <div>
-      Create Announcements Page
+       {
+         !currentUserRole &&
+        <Unauthorized />
+      }
+      {
+        currentUserRole !== 10 &&
+        <Unauthorized />
+      }
+      {
+        currentUserRole === 10 &&
+        <Unauthorized />
+      }
     </div>
   )
 }

@@ -1,8 +1,24 @@
+import Unauthorized from "./Unauthorized"
 
 const CreateCourse = () => {
+  const currentUserRole = Number(localStorage.getItem('userRoleId'))
+  
+
+  
   return (
     <div>
-      Create Course Page
+      {
+         !currentUserRole &&
+        <Unauthorized />
+      }
+      {
+        currentUserRole !== 10 &&
+        <Unauthorized />
+      }
+      {
+        currentUserRole === 10 &&
+        <Unauthorized />
+      }
     </div>
   )
 }
