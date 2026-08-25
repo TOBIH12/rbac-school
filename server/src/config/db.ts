@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const { Pool } = pkg;
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === 'prod';
 
 // Prioritize DATABASE_URL (Render standard), fallback to discrete env vars for local dev
 const pool = new Pool(
