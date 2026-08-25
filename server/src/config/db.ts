@@ -3,20 +3,23 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const env = process.env.NODE_ENV || 'dev';
-
 const { Pool } = pkg;
+const isProduction = process.env.NODE_ENV === 'production';
 
-const configs: Record<string, any> = {
-  dev: {
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: Number(process.env.DB_PORT) || 5432,
-  }
-};
-
-const pool = new Pool(configs[env]);
+// Prioritize DATABASE_URL (Render standard), fallback to discrete env vars for local dev
+const pool = new Pool(
+  process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: isProduction ? { rejectUnauthorized: false } : false,
+      }
+    : {
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST || 'localhost',
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
+        port: Number(process.env.DB_PORT) || 5432,
+      }
+);
 
 export default pool;
