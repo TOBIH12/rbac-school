@@ -6,3 +6,4 @@ INSERT INTO public.permissions (id, name) VALUES
 (102, 'view_system_logs'),
 (103, 'view_students'),
 (106, 'view_grades');
+ON CONFLICT (id) DO NOTHING;
