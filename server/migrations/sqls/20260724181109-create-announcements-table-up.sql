@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS public.announcements
     created_on TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     creator_id integer REFERENCES public.users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "article_pkey" PRIMARY KEY (announcements_id)
-)
+);
