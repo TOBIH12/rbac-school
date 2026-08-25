@@ -9,7 +9,7 @@
     },
     "prod": {
         "driver": "pg",
-        "connectionString": { "env": "DATABASE_URL" },
+        "ENV": "DATABASE_URL",
         "ssl": { "rejectUnauthorized": false }
     }
 }
