@@ -16,7 +16,7 @@ const LecturerDashboard = () => {
       <h1 className="text-2xl md:text-3xl text-gray-800 mb-2 mt-4">{user?.firstName} {user?.lastName}</h1>
 
 
-      <h1 className="text-2xl md:text-3xl text-gray-800 my-4">Quick Actions</h1>
+      <h1 className="text-2xl md:text-3xl text-gray-800 mt-24">Quick Actions</h1>
          <div className="flex flex-col md:flex-row w-full mt-5 gap-5">
             <Link to={'/view_grades'} className="flex flex-col gap-1 bg-gray-900 hover:bg-gray-800 text-white w-1/2 md:w-1/5 py-3 px-4 justify-center items-center rounded-lg transition-all ease-in duration-1000s">
             <h3 className="text-1xl mb-2">Input student grades</h3>
@@ -33,6 +33,12 @@ const LecturerDashboard = () => {
             <Link to={'/view_courses'} className="flex flex-col gap-1 bg-gray-900 hover:bg-gray-800 text-white w-1/2 md:w-1/5 py-3 px-4 justify-center items-center rounded-lg transition-all ease-in duration-1000s">
             <h3 className="text-1xl mb-2">Your Courses</h3>
             <CiViewList className="w-full text-2xl mb-5"/>
+            <hr className="border border-gray-100 w-full"/>
+            <hr className="border border-gray-100 w-full"/>
+            </Link>
+             <Link to={'/announcements'} className="flex flex-col gap-1 bg-gray-900 hover:bg-gray-800 text-white w-1/2 md:w-1/5 py-3 px-4 justify-center items-center rounded-lg transition-all ease-in duration-1000s">
+            <h3 className="text-1xl mb-2">View Announcements</h3>
+            <CiViewTable className="w-full text-2xl mb-5"/>
             <hr className="border border-gray-100 w-full"/>
             <hr className="border border-gray-100 w-full"/>
             </Link>
